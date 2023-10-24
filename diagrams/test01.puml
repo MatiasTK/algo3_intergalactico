@@ -1,0 +1,32 @@
+@startuml
+actor TestCase
+title "test01CorbetaDisparaDosMisilesElPuntajeEsCorrecto"
+
+create "m1: Misil"
+TestCase -> "m1: Misil": Misil(cantidad: 3,extra: 0)
+create "e1:EscudoSimple"
+TestCase -> "e1:EscudoSimple": EscudoSimple(puntos: 20)
+create "m2: Misil"
+TestCase -> "m2: Misil": Misil(cantidad: 3,extra: 0)
+create "e2:EscudoSimple"
+TestCase -> "e2:EscudoSimple": EscudoSimple(puntos: 20)
+create "corbataAliado: Nave"
+TestCase -> "corbataAliado: Nave": Nave(e1, m1)
+create "corbataEnemigo: Nave"
+TestCase -> "corbataEnemigo: Nave": Nave(e2, m1)
+
+loop Ataca 2 veces
+TestCase -> "corbataAliado: Nave": atacarA(corbataEnemigo)
+"corbataAliado: Nave" -> "m1: Misil": atacarA(corbataEnemigo)
+"m1: Misil" -> "corbataEnemigo: Nave": recibirDisparo(danio: 10)
+"corbataEnemigo: Nave" -> "e2:EscudoSimple": recibirAtaque(danio: 10)
+end
+
+TestCase -> "corbataAliado: Nave": calcularPuntaje()
+"corbataAliado: Nave" -> "m1: Misil": calcularPuntaje()
+"m1: Misil" --> "corbataAliado: Nave": 10
+"corbataAliado: Nave" -> "e1:EscudoSimple": calcularPuntaje()
+"e1:EscudoSimple" --> "corbataAliado: Nave": 20
+"corbataAliado: Nave" --> TestCase: 30
+
+@enduml

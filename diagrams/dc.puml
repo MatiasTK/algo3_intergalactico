@@ -1,0 +1,77 @@
+@startuml
+class Flota {
+    + Flota(Nave)
+    + agregarNave(nave:Nave)
+    + calcularPuntajeTotal(): int
+}
+
+class Nave {
+    + Nave(ataque: SistemaAtaque, defensa: SistemaDefensa)
+    + calcularPuntaje(): int
+    + atacarA(nave:Nave)
+    + recibirAtaque(danio: int)
+}
+
+interface SistemaAtaque{
+    + atacarA(nave:Nave)
+    + calcularPuntaje(): int
+}
+
+
+interface SistemaDefensa{
+    + recibirDisparo(danio: int)
+    + calcularPuntaje(int puntajeAtaque): int
+}
+
+class Misil {
+    - cantidadMisiles: int
+    - puntosExtra: int
+    - puntos: int
+    - extra: boolean
+    + Misil(cantidad: int, puntajeExtra: int)
+    + atacarA(nave:Nave)
+    + calcularPuntaje(): int
+}
+
+class BombasNeutrones {
+    - cantidadBombas: int
+    - puntosExtra: int
+    - puntos: int
+    + BombasNeutrones(cantidad: int, puntajeExtra: int)
+    + atacarA(nave:Nave)
+    + calcularPuntaje(): int
+}
+
+class EscudoSimple {
+    - puntaje: int
+    + EscudoSimple(puntajeInicial: int)
+    + recibirDisparo(danio: int)
+    + calcularPuntaje(int puntajeAtaque): int
+}
+
+class EscudoFenix {
+    - backup: SistemaDefensa
+    - puntos: int
+    - backupActivado: boolean
+    + EscudoFenix(backup: SistemaDefensa)
+    - recibirDisparoPrincipal(danio: int)
+    + recibirDisparo(danio: int)
+    + calcularPuntaje(int puntajeAtaque): int
+}
+
+class EscudoIonico {
+    + recibirDisparo(danio: int)
+    + calcularPuntaje(int puntajeAtaque): int
+}
+
+Flota "1" *--> "1..*" Nave
+Nave *-> SistemaAtaque
+SistemaDefensa <-* Nave
+SistemaAtaque <|-- Misil
+SistemaAtaque <|-- BombasNeutrones
+SistemaDefensa <|-- EscudoSimple
+SistemaDefensa <|-- EscudoFenix
+SistemaDefensa <|-- EscudoIonico
+
+
+@enduml
